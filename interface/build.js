@@ -35,16 +35,17 @@ await nwbuild({
       name,
       icon: "./resources/icon.icns",
       CFBundleDisplayName: name,
-      CFBundleIdentifier: "com.example.nwjs-sveltekit-app",
+      CFBundleIdentifier: "tech.xellu.polymer",
       CFBundleVersion: version,
     },
     /** @type {import('nw-builder').WindowsAppOptions} */
     win: {
       name,
       icon: "./resources/icon.ico",
-      company: "example",
+      company: "Polymer Resin",
       productVersion: version,
       fileVersion: version,
+      fileDescription: "Polymer Launcher for Minecraft",
       version,
     },
     /** @type {import('nw-builder').LinuxAppOptions} */

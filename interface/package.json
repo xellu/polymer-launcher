@@ -1,6 +1,6 @@
 {
-  "name": "nwjs-sveltekit",
-  "version": "0.0.1",
+  "name": "polymer",
+  "version": "1.0.0",
   "main": "serve.js",
   "devDependencies": {
     "@skeletonlabs/skeleton": "^2.10.1",
