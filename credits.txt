@@ -1,0 +1,1 @@
+nwjs framework - https://github.com/edde746/nwjs-sveltekit-boilerplate

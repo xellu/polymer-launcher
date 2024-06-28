@@ -1,0 +1,51 @@
+{
+  "name": "nwjs-sveltekit",
+  "version": "0.0.1",
+  "main": "serve.js",
+  "devDependencies": {
+    "@skeletonlabs/skeleton": "^2.10.1",
+    "@skeletonlabs/tw-plugin": "^0.4.0",
+    "@sveltejs/adapter-static": "^3.0.0",
+    "@sveltejs/kit": "^2.0.1",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/node": "^20.14.9",
+    "@types/nw.js": "^0.13.20",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "copy-production-deps": "^0.2.1",
+    "cross-env": "^7.0.3",
+    "nw": "^0.82.0",
+    "nw-builder": "^4.4.2-beta.3",
+    "postcss": "^8.4.38",
+    "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.6.4",
+    "svelte": "^4.0.5",
+    "svelte-check": "^3.4.3",
+    "tailwindcss": "^3.4.4",
+    "tslib": "^2.4.1",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "node-remote": "http://localhost:*",
+  "private": true,
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "concurrently \"vite dev\" \"cross-env NODE_ENV=development nw .\"",
+    "build": "npm run build:web && node build.js",
+    "build:web": "vite build",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "icons": "cd resources && npx png2icons ../static/favicon.png icon -allwe -bc",
+    "postinstall": "npx base-volta-off-of-nwjs@latest"
+  },
+  "type": "module",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "portfinder": "^1.0.32"
+  },
+  "volta": {
+    "node": "20.7.0"
+  }
+}
