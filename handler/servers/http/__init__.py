@@ -7,7 +7,7 @@ logger.info("Initializing HTTP server")
 
 from events import EventBus
 
-from .routes import (example)
+from .routes import (settings)
 from .router import App
 
 from .services.adapter import Reply
@@ -17,7 +17,6 @@ import waitress
 
 import flask
 from flask import request, cli
-from core.tools import RandomStr
 
 success_codes = range(100, 399)
 warning_codes = range(400, 499)

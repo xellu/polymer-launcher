@@ -2,6 +2,7 @@
 import os, json
 
 from . import engine
+from ....templates import DatabaseSchemes
 
 Item = engine.item
 instances = []
@@ -17,8 +18,15 @@ class RuntimeDB:
         self.debug = debug
         self.runtime = runtime
         
+        if not os.path.exists(self.folder):
+            os.makedirs(self.folder, exist_ok=True)
+
         if os.path.exists(self.path) == False and runtime == False:
-            open(self.path, "x").write("[]")
+            if DatabaseSchemes.Schemes.get(self.name): #load db from scheme/template
+                self.content = DatabaseSchemes.Schemes.get(self.name)
+                self.save()
+            else:
+                open(self.path, "x").write("[]")
         
         self.load()
         instances.append(self)

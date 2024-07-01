@@ -40,7 +40,7 @@ Shell = ShellService(ShellSource("Core"))
 Shell.start()
 
 Database = DatabaseService(Config, [
-    "users"
+    "settings"
 ])
 Database.start()
 
@@ -68,8 +68,8 @@ def wait_for_services():
 
             Core.warn(f"Services are taking too long to come online, please check the logs for errors ({max_notifiers - len(notifiers)}/{max_notifiers})")
             
-        if not CoreStats.database_service_loaded:
-            continue
+        # if not CoreStats.database_service_loaded:
+        #     continue
 
         Core.success("All services are online, server is ready")
         EventBus.signal("ready")

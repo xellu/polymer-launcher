@@ -1,7 +1,6 @@
 import flask
-import flask_limiter
 
-from core import Config, Database
+from core import Config
 from core.tools import LoadPlaceholders
 from core.logging import LoggingManager
 
@@ -29,9 +28,9 @@ class BlueprintLoader:
         logger.info(f"Loaded {len(self.bps)} route blueprints")
 
 #routes
-BPLoader = BlueprintLoader(root="/api/v2")
+BPLoader = BlueprintLoader(root="/polymer/v1")
 
-v2example = BPLoader.new("example")
+v1settings = BPLoader.new("settings")
 
 @EventBus.on("http.start")
 def on_server_start():
