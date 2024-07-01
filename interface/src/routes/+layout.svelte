@@ -18,7 +18,7 @@
 <div class="flex h-screen">
 
     <!-- sidebar -->
-    <div class="bg-surface-700 w-64 flex flex-col gap-2 p-3 h-full select-none rounded-r-xl drop-shadow-md">
+    <div class="bg-surface-700 flex flex-col gap-2 p-3 h-full select-none drop-shadow-md z-20">
         <Logo />
 
         <!-- padding -->
@@ -26,7 +26,7 @@
 
         {#each navItems as item}
             <a href="{item.route}" draggable="false">
-                <button class="btn {currentRoute == item.route ? 'variant-filled-primary' : 'variant-soft-primary'} w-full flex gap-3 items-center justify-start">
+                <button class="btn {currentRoute == item.route ? 'variant-filled-primary' : 'variant-filled-surface'} w-full flex gap-3 items-center justify-start">
                     <i class="{item.icon}"></i>
                     <span>{item.name}</span>
                 </button>
