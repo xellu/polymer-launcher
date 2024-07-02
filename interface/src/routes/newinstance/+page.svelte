@@ -15,9 +15,9 @@
 
     let icons: string[] = [
         "/Polymer.png",
-        "/PolymerMono.png",
-        "/PolymerMonoWhite.png",
-        "/PolymerMonoBlack.png",
+        "/PolymerWhite.png",
+        "/PolymerBlack.png",
+        "/PolymerCatppuccin.png"
     ]
 
     let settings: any = {}
@@ -46,10 +46,13 @@
     function loadIcons() {
         fetch(`${apiBaseUrl}/instances/icons`)
         .then(res => {
+            let newIcons: string[] = ["/Polymer.png", "/PolymerWhite.png", "/PolymerBlack.png", "/PolymerCatppuccin.png"]
             res.text().then(text => {
                 JSON.parse(text).icons.forEach((icon: string) => {
-                    icons = [...icons, `${apiBaseUrl}/instances/icons/${icon}`]
+                    newIcons.push(`${apiBaseUrl}/instances/icons/${icon}`)
                 });
+
+                icons = newIcons;
             })
         })
     }
@@ -58,6 +61,11 @@
         name: "",
         version: "",
         icon: icons[0]
+    }
+
+    let iconUpload: {open: boolean, file: any} = {
+        open: false,
+        file: null
     }
 
     onMount(() => {
@@ -107,10 +115,31 @@
                         <img src={icon} alt={icon} class="w-8 h-8 rounded-md" draggable="false" />
                     </button>
                 {/each}
-                <button class="hover:text-primary-500 duration-300">
+                <button class="{iconUpload.open ? 'text-primary-500' : 'hover:text-primary-500'} duration-300" on:click={() => {
+                    iconUpload.open = !iconUpload.open
+                }}>
                     <i class="bi bi-plus-square-dotted text-3xl"></i>
                 </button>
             </div>
+
+            {#if iconUpload.open}
+            <div class="flex gap-1 items-center mt-5">
+                <input type="file" accept="image/*" class="input" bind:files={iconUpload.file} on:change={() => {
+                    //upload file
+                    let formData = new FormData();
+                    formData.append("icon", iconUpload.file[0]);
+
+                    fetch(`${apiBaseUrl}/instances/icons/upload`, {
+                        method: "POST",
+                        body: formData
+                    }).then(res => {
+                        if (res.ok) {
+                            loadIcons()
+                        }
+                    })
+                }}>
+            </div>
+            {/if}
         </label>
 
         <button class="btn variant-filled-primary mt-5">Create</button>

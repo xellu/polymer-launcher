@@ -1,6 +1,8 @@
 from ..router import v1instances
 from ..services.adapter import Reply, Require
 
+from core.tools import RandomStr
+
 from flask import request, send_file
 import os
 import requests
@@ -26,6 +28,14 @@ def get_versions():
 def get_icons():
     icons = os.listdir("data/icons")
     return Reply(icons=icons)
+
+@v1instances.route("/icons/upload", methods=["POST"])
+def upload_icon():
+    file = request.files.get("icon")
+    extension = file.filename.split(".")[-1]
+
+    file.save(f"data/icons/{RandomStr(16)}.{extension}")
+    return Reply()
 
 @v1instances.route("/icons/<icon_name>", methods=["GET"])
 def get_icon(icon_name):

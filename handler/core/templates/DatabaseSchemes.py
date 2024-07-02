@@ -37,7 +37,7 @@ def SettingsTemplate():
                         "type": "select",
                         "label": "Polymer Icon",
                         "value": "Polymer",
-                        "options": ["Polymer", "PolymerMono", "PolymerBlackBG", "PolymerWhiteBG", "PolymerMonoBlack", "PolymerMonoWhite"]
+                        "options": ["Polymer", "PolymerWhite", "PolymerBlack", "PolymerCatppuccin", "PolymerBlackBG", "PolymerWhiteBG", "PolymerMonoBlack", "PolymerMonoWhite"]
                     }
                 ]
             }

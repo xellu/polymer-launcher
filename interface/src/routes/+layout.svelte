@@ -57,7 +57,7 @@
 
 <title>Polymer</title>
 
-<div class="flex h-screen">
+<div class="flex h-screen select-none">
 
     <!-- sidebar -->
     <div class="bg-surface-50 dark:bg-surface-700 flex flex-col gap-2 p-3 h-full select-none drop-shadow-md z-20 min-w-64">
