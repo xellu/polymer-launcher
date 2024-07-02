@@ -1,17 +1,10 @@
 <script lang="ts">
-    import { favicon } from "$lib/config";
+    import Placeholder from "$lib/components/placeholder.svelte";
+    
+    import { apiBaseUrl } from "$lib/config";
+    import { goto } from "$app/navigation";
 
     import { slide, fade } from "svelte/transition";
-
-    let icon = "/favicon.png";
-    favicon.subscribe((value) => {
-        icon = value;
-    })
-
-    let popUps: {instance:boolean, folder:boolean} = {
-        instance: false,
-        folder: false
-    }
 
     let instances: any[] = [];
 
@@ -21,7 +14,7 @@
             name: "New Instance",
             icon: "bi bi-plus-square",
             onClick: () => {
-                popUps.instance = true
+                goto(`/newgame`);	
             }
         },
         {
@@ -35,7 +28,7 @@
 </script>
 
 <!-- tabs -->
-<div class="fixed h-14 w-full bg-surface-600 p-3 flex items-center select-none">
+<div class="fixed h-14 w-full bg-surface-100 dark:bg-surface-600 p-3 flex items-center select-none drop-shadow-sm">
     {#each actions as action}
         <button on:click={() => action.onClick()} class="flex items-center gap-2 btn btn-sm">
             <i class={action.icon}></i>
@@ -44,20 +37,10 @@
     {/each}
 </div>
 
-<div class="pt-14 p-3 h-full {instances.length == 0 ? 'flex items-center justify-center flex-col gap-5' : ''}">
+<div class="pt-14 p-3 h-full">
     {#if instances.length == 0}
-        <img src="{icon}" alt="" class="w-72 opacity-5 select-none" draggable="false">
+        <Placeholder />
     {:else}
         <p>You have instances created</p>
     {/if}
 </div>
-
-{#if popUps.instance}
-<div class="z-30 top-0 left-0 fixed w-screen h-screen bg-black/30 flex items-center justify-center" transition:fade>
-    <div class="max-w-xl w-full p-5 card variant-filled-surface" transition:slide>
-        <h5 class="h5 text-primary-500 font-bold">New Instance</h5>
-
-        <input type="text">
-    </div>
-</div>
-{/if}

@@ -1,10 +1,12 @@
 <script lang="ts">
     import Loader from "$lib/components/loader.svelte";
 
-    import { SlideToggle } from "@skeletonlabs/skeleton";
-    import { onMount } from "svelte";
     import { apiBaseUrl } from "$lib/config";
     import { settingsManager } from "$lib/scripts/SettingsManager.ts";
+
+    import { SlideToggle } from "@skeletonlabs/skeleton";
+    import { onMount } from "svelte";
+
 
     import { getToastStore, getModalStore } from "@skeletonlabs/skeleton";
     const toast = getToastStore();
@@ -108,12 +110,12 @@
             <Loader />
         </div>
     {:else}
-    <div class="h-full bg-surface-800 p-3 flex flex-col gap-2 pt-0 drop-shadow-md min-w-48">
+    <div class="h-full bg-surface-100 dark:bg-surface-800 p-3 flex flex-col gap-2 pt-0 drop-shadow-md min-w-48">
         {#each Object.keys(settings) as category}
             <p class="uppercase mt-3 font-bold text-primary-500 text-sm">{category}</p>
             {#each settings[category] as setting}
                 <button
-                    class="btn w-full flex gap-1 items-center justify-start {currentPage.name == setting.name ? 'variant-filled-primary' : 'variant-filled-surface'}"
+                    class="btn w-full flex gap-1 items-center justify-start {currentPage.name == setting.name ? 'variant-filled-primary' : 'variant-soft-primary'}"
                     on:click={() => {
                         currentPage = {
                             id: Object.keys(settings).filter(key => settings[key].includes(setting))[0], // get the category id (key) of the setting

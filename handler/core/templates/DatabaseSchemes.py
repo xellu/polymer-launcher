@@ -4,6 +4,18 @@ def SettingsTemplate():
     return [Item(
         application = [
             {
+                "name": "General",
+                "icon": "bi bi-gear",
+                "settings": [
+                    {
+                        "id": "showSnapshots",
+                        "type": "switch",
+                        "label": "Show Snapshots",
+                        "value": False
+                    }
+                ]
+            },
+            {
                 "name": "Appearance",
                 "icon": "bi bi-palette",
                 "settings": [

@@ -31,6 +31,7 @@ class BlueprintLoader:
 BPLoader = BlueprintLoader(root="/polymer/v1")
 
 v1settings = BPLoader.new("settings")
+v1instances = BPLoader.new("instances")
 
 @EventBus.on("http.start")
 def on_server_start():

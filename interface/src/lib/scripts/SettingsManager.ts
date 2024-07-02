@@ -20,7 +20,8 @@ export const settingsManager = {
         }
 
         settingsManager.update()
-        eventLoop = setInterval(settingsManager.update, 10000) //pull settings from server every 10 seconds
+        // eventLoop = setInterval(settingsManager.update, 10000) //pull settings from server every 10 seconds
+        // ^ not needed, update is called when page is loaded or when settings are applied
         
         say("Initialized")
     },

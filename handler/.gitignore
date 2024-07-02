@@ -1,5 +1,5 @@
 .logs/
-data/
+data/*.xeldb
 config.json
 
 # Byte-compiled / optimized / DLL files

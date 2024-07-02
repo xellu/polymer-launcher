@@ -1,7 +1,13 @@
 <script lang="ts">
-    export let center: boolean = false;
-</script>
+    import { favicon } from "$lib/config";
 
+    let icon = "/favicon.png";
+    favicon.subscribe((value) => {
+        icon = value;
+    })
+
+    export let center: boolean = false
+</script>
 <style>
     .animate-loader {
         animation: loading 2.5s ease infinite;
@@ -31,6 +37,6 @@
     }
 </style>
 
-<div class="{center ? 'w-full h-screen flex items-center justify-center' : ''}">
-    <img src="/favicon.png" alt="" class="w-32 h-32 animate-loader">
+<div class="{center ? 'w-full h-screen flex items-center justify-center' : ''} select-none">
+    <img src="{icon}" alt="" class="w-32 h-32 animate-loader" draggable="false">
 </div>
