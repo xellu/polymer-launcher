@@ -1,7 +1,7 @@
 from ..router import v1settings
 from ..services.adapter import Reply, Require
 
-from core.services.database.jsondb import Item
+from core.services.database.jsondb import Item, convert_to_dict
 from core.templates.DatabaseSchemes import SettingsTemplate
 
 from core import Database
@@ -67,22 +67,25 @@ def to_short_config(long_config, categories=None):
 
 def to_long_config(short_config, template):
     long_config = deepcopy(template)
-    for category in long_config:
-        if not isinstance(category, dict):
+    short_config = convert_to_dict(short_config)
+
+    for _, category in long_config.items():
+        if not isinstance(category, list):
             continue
 
-        settings = category.get("settings", [])
-        if not isinstance(settings, list) or not settings:
-            continue
-
-        for setting in settings:
-            if not isinstance(setting, dict):
+        for subcategory in category:
+            settings = subcategory.get("settings", [])
+            if not isinstance(settings, list) or not settings:
                 continue
 
-            if setting.get("id") is None:
-                continue
+            for setting in settings:
+                if not isinstance(setting, dict):
+                    continue
 
-            setting["value"] = short_config.get(setting["id"], setting.get("value"))
-    
+                if setting.get("id") is None:
+                    continue
+                
+                setting["value"] = short_config.get(setting["id"])
+        
     long_config.pop("DATAFORGE_UUID", None)
     return long_config

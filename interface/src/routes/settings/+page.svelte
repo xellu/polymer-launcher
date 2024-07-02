@@ -15,6 +15,7 @@
     const labelBlacklist: string[] = ["text", "heading", "button", "switch"]
 
     let currentPage: any = {
+        id: null,
         name: "Loading",
         settings: [],
     }
@@ -33,6 +34,7 @@
                 settings = JSON.parse(text)
                 
                 currentPage = {
+                    id: Object.keys(settings)[0],
                     name: settings[Object.keys(settings)[0]][0].name,
                     settings: settings[Object.keys(settings)[0]][0].settings,
                 }
@@ -114,6 +116,7 @@
                     class="btn w-full flex gap-1 items-center justify-start {currentPage.name == setting.name ? 'variant-filled-primary' : 'variant-filled-surface'}"
                     on:click={() => {
                         currentPage = {
+                            id: Object.keys(settings).filter(key => settings[key].includes(setting))[0], // get the category id (key) of the setting
                             name: setting.name,
                             settings: setting.settings,
                         }
@@ -129,14 +132,15 @@
     <!-- settings -->
     <div class="p-3 flex flex-col gap-3">
         <h2 class="h3 font-bold">{currentPage.name}</h2>
-        {#each currentPage.settings as setting}
+        {#each currentPage.settings as setting, i}
         <div>
             <!-- setting label -->
             {#if setting.label && !labelBlacklist.includes(setting.type)} <p class="text-sm mt-5 mb-1">{setting.label}</p> {/if}
 
             <!-- enum -->
             {#if setting.type == "select"}
-                <select bind:value={setting.value} class="input p-2 rounded-md">
+                <select bind:value={setting.value}
+                class="input p-2 rounded-md">
                     {#each setting.options as option}
                         <option value={option}>{option}</option>
                     {/each}

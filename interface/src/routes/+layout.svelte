@@ -8,6 +8,8 @@
     import { settingsManager, settingsStore } from "$lib/scripts/SettingsManager.ts";
     import { onMount, onDestroy } from "svelte";
 
+    import { favicon } from "$lib/config";
+
     initializeStores();
 
     let currentRoute: string | any = "" //had to add any because of typescript 😍😍
@@ -41,8 +43,13 @@
         if (settings.darkmode != undefined) {
             document.getElementsByTagName("html")[0].className = settings.darkmode ? "dark" : "";
         }
+        if (settings.favicon) {
+            favicon.set(settings.favicon + ".png");
+        }
     }
 </script>
+
+<title>Polymer</title>
 
 <div class="flex h-screen">
 

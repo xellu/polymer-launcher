@@ -19,6 +19,13 @@ def SettingsTemplate():
                         "type": "switch",
                         "label": "Dark Mode",
                         "value": True
+                    },
+                    {
+                        "id": "favicon",
+                        "type": "select",
+                        "label": "Polymer Icon",
+                        "value": "Polymer",
+                        "options": ["Polymer", "PolymerMono", "PolymerBlackBG", "PolymerWhiteBG", "PolymerMonoBlack", "PolymerMonoWhite"]
                     }
                 ]
             }
