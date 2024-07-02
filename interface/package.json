@@ -3,22 +3,20 @@
   "version": "1.0.0",
   "main": "serve.js",
   "window": {
-        "icon": "./RESOURCES/VISUALS/FAVICON.png",
-        "title": "Polymer",
-        "show_in_taskbar": true,
-        "position": "center",
-        "transparent": false,
-        "resizable": false,
-        "toolbar": false,
-        "frame": false,
-
-        "width": 1000,
-        "min_width": 1000,
-        "max-width": 1000,
-
-        "height": 600,
-        "min_height": 600,
-        "max_height": 600
+    "icon": "./resources/icon.ico",
+    "title": "Polymer",
+    "show_in_taskbar": true,
+    "position": "center",
+    "transparent": false,
+    "resizable": false,
+    "toolbar": true,
+    "frame": true,
+    "width": 1000,
+    "min_width": 1000,
+    "max-width": 1000,
+    "height": 600,
+    "min_height": 600,
+    "max_height": 600
   },
   "devDependencies": {
     "@skeletonlabs/skeleton": "^2.10.1",

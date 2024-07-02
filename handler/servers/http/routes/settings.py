@@ -8,8 +8,10 @@ from copy import deepcopy
 @v1settings.route("/fetch", methods=["GET"])
 def fetch_settings():
     #dump long version of settings
-    settings = Database.get_database("settings").content[0]
-    return Reply(**vars(settings))
+    settings = vars(deepcopy(Database.get_database("settings")).content[0])
+    settings.pop("DATAFORGE_UUID", None)
+
+    return Reply(**settings)
 
 @v1settings.route("/values", methods=["GET"])
 def fetch_settings_short():

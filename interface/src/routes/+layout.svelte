@@ -3,6 +3,9 @@
 
     import Logo from "$lib/components/logo.svelte"
     import { page } from "$app/stores"
+    import { initializeStores, Toast } from '@skeletonlabs/skeleton';
+
+    initializeStores();
 
     let currentRoute: string | any = "" //had to add any because of typescript 😍😍
     page.subscribe((value) => {
@@ -39,3 +42,5 @@
     </div>
 
 </div>
+
+<Toast />

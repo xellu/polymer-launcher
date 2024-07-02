@@ -1,41 +1,58 @@
 <script lang="ts">
-    import { SlideToggle } from "@skeletonlabs/skeleton";
+    import Loader from "$lib/components/loader.svelte";
 
-    let settings: any = {
-        launcher: [
-            {
-                name: "Appearance",
-                icon: "bi bi-palette",
-                settings: [
-                    {
-                        id: "theme",
-                        type: "select",
-                        label: "Theme",
-                        value: "default",
-                        options: ["default", "catppuccin"]
-                    },
-                    {
-                        id: "darkmode",
-                        type: "switch",
-                        label: "Dark Mode",
-                        value: true
-                    }
-                ]
-            }
-        ]
-    }
+    import { SlideToggle } from "@skeletonlabs/skeleton";
+    import { onMount } from "svelte";
+    import { apiBaseUrl } from "$lib/config";
+
+    import { getToastStore } from "@skeletonlabs/skeleton";
+    const toast = getToastStore();
+
+    let settings: any = {}
 
     const labelBlacklist: string[] = ["text", "heading", "button", "switch"]
 
     let currentPage: any = {
-        name: settings.launcher[0].name,
-        settings: settings.launcher[0].settings,
+        name: "Loading",
+        settings: [],
     }
+
+    onMount(() => {
+        fetch(`${apiBaseUrl}/settings/fetch`)
+        .then(res => {
+            if (!res.ok) {
+                return toast.trigger({
+                    message: `Failed to fetch settings: ${res.status} ${res.statusText}`,
+                    background: "variant-filled-error"
+                })
+            }
+
+            res.text().then(text => {
+                settings = JSON.parse(text)
+                
+                currentPage = {
+                    name: settings[Object.keys(settings)[0]][0].name,
+                    settings: settings[Object.keys(settings)[0]][0].settings,
+                }
+            })
+        })
+        .catch(err => {
+            toast.trigger({
+                message: `Failed to fetch settings: ${err}`,
+                background: "variant-filled-error"
+            })
+        })
+    })
 </script>
 
 <div class="flex h-screen">
     <!-- tabs -->
-    <div class="h-full bg-surface-800 p-3 flex flex-col gap-2 pt-0 drop-shadow-md">
+    {#if Object.keys(settings).length == 0}
+        <div class="flex w-full h-screen items-center justify-center">
+            <Loader />
+        </div>
+    {:else}
+    <div class="h-full bg-surface-800 p-3 flex flex-col gap-2 pt-0 drop-shadow-md min-w-48">
         {#each Object.keys(settings) as category}
             <p class="uppercase mt-3 font-bold text-primary-500">{category}</p>
             {#each settings[category] as setting}
@@ -88,4 +105,5 @@
         </div>
         {/each}
     </div>
+    {/if}
 </div>
