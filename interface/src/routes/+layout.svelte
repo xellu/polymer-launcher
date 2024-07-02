@@ -3,7 +3,10 @@
 
     import Logo from "$lib/components/logo.svelte"
     import { page } from "$app/stores"
-    import { initializeStores, Toast } from '@skeletonlabs/skeleton';
+    import { initializeStores, Toast, Modal } from '@skeletonlabs/skeleton';
+
+    import { settingsManager, settingsStore } from "$lib/scripts/SettingsManager.ts";
+    import { onMount, onDestroy } from "svelte";
 
     initializeStores();
 
@@ -16,6 +19,29 @@
         { name: "Instances", route: "/", icon: "bi bi-boxes" },
         { name: "Settings", route: "/settings", icon: "bi bi-gear"}
     ]
+
+    onMount(() => {
+        settingsManager.init();
+    })
+
+    onDestroy(() => {
+        settingsManager.unload();
+    })
+
+    let settings: any = {}
+    settingsStore.subscribe((value) => {
+        settings = value;
+        processSettings();
+    })
+
+    function processSettings() {
+        if (settings.theme) {
+            document.getElementsByTagName("body")[0].setAttribute("data-theme", settings.theme);
+        }
+        if (settings.darkmode != undefined) {
+            document.getElementsByTagName("html")[0].className = settings.darkmode ? "dark" : "";
+        }
+    }
 </script>
 
 <div class="flex h-screen">
@@ -44,3 +70,4 @@
 </div>
 
 <Toast />
+<Modal />

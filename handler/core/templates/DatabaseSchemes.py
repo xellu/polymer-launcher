@@ -12,7 +12,7 @@ def SettingsTemplate():
                         "type": "select",
                         "label": "Theme",
                         "value": "default",
-                        "options": ["default", "catppuccin"]
+                        "options": ["default", "catppuccin", "amoled"]
                     },
                     {
                         "id": "darkmode",

@@ -1,6 +1,7 @@
 from ..router import v1settings
 from ..services.adapter import Reply, Require
 
+from core.services.database.jsondb import Item
 from core import Database
 from flask import request
 from copy import deepcopy
@@ -18,6 +19,17 @@ def fetch_settings_short():
     #dump short version of settings
     settings = Database.get_database("settings").content[0]
     return Reply(**to_short_config(vars(settings)))
+
+@v1settings.route("/push", methods=["POST"])
+def push_settings():
+    data = Require(request, settings=dict).body()
+    if not data.ok:
+        return Reply(**data.content), 400
+    
+    settings = Item(**data.content["settings"])
+    Database.get_database("settings").content = [settings]
+    Database.get_database("settings").save()
+    return Reply()
 
 #config conversions----
 def to_short_config(config, categories=None):

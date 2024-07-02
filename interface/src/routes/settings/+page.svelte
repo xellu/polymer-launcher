@@ -4,6 +4,7 @@
     import { SlideToggle } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
     import { apiBaseUrl } from "$lib/config";
+    import { settingsManager } from "$lib/scripts/SettingsManager.ts";
 
     import { getToastStore } from "@skeletonlabs/skeleton";
     const toast = getToastStore();
@@ -17,7 +18,7 @@
         settings: [],
     }
 
-    onMount(() => {
+    function loadSettings() {
         fetch(`${apiBaseUrl}/settings/fetch`)
         .then(res => {
             if (!res.ok) {
@@ -42,6 +43,45 @@
                 background: "variant-filled-error"
             })
         })
+    }
+
+    function pushSettings() {
+        fetch(`${apiBaseUrl}/settings/push`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                settings: settings
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                res.text().then(text => {
+                    console.log(text)
+                })
+                return toast.trigger({
+                    message: `Failed to push settings: ${res.status} ${res.statusText}`,
+                    background: "variant-filled-error"
+                })
+            } else {
+                toast.trigger({
+                    message: "Settings applied successfully",
+                    background: "variant-filled-success"
+                })
+                settingsManager.update()
+            }
+        })
+    }
+
+    function resetSettings(confirm?: boolean) {
+        if (confirm) {
+            loadSettings()
+        }
+    }
+
+    onMount(() => {
+        loadSettings()
     })
 </script>
 
@@ -106,4 +146,13 @@
         {/each}
     </div>
     {/if}
+</div>
+
+<div class="fixed bottom-0 right-0 p-3 flex gap-3 items-center">
+    <button class="btn variant-outline-error" on:click={() => {
+        resetSettings()
+    }}>Discard</button>
+    <button class="btn variant-filled-primary" on:click={() => {
+        pushSettings()
+    }}>Apply</button>
 </div>

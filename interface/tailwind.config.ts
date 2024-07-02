@@ -7,6 +7,7 @@ import { skeleton } from '@skeletonlabs/tw-plugin';
 //theme imports
 import { themeDefault } from './themes/default';
 import { themeCatppuccin } from './themes/catppuccin';
+import { themeAmoled } from './themes/amoled';
 
 const config = {
 	// 2. Opt for dark mode to be handled via the class method
@@ -28,7 +29,8 @@ const config = {
 			themes: {
 				custom: [
 					themeDefault,
-					themeCatppuccin
+					themeCatppuccin,
+					themeAmoled
 				]
 			}
 		})
