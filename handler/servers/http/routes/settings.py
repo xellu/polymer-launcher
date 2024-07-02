@@ -2,6 +2,8 @@ from ..router import v1settings
 from ..services.adapter import Reply, Require
 
 from core.services.database.jsondb import Item
+from core.templates.DatabaseSchemes import SettingsTemplate
+
 from core import Database
 from flask import request
 from copy import deepcopy
@@ -9,16 +11,14 @@ from copy import deepcopy
 @v1settings.route("/fetch", methods=["GET"])
 def fetch_settings():
     #dump long version of settings
-    settings = vars(deepcopy(Database.get_database("settings")).content[0])
-    settings.pop("DATAFORGE_UUID", None)
-
+    settings = to_long_config(Database.get_database("settings").content[0], vars(SettingsTemplate()[0]))
     return Reply(**settings)
 
 @v1settings.route("/values", methods=["GET"])
 def fetch_settings_short():
     #dump short version of settings
     settings = Database.get_database("settings").content[0]
-    return Reply(**to_short_config(vars(settings)))
+    return Reply(**vars(settings))
 
 @v1settings.route("/push", methods=["POST"])
 def push_settings():
@@ -27,15 +27,15 @@ def push_settings():
         return Reply(**data.content), 400
     
     settings = Item(**data.content["settings"])
-    Database.get_database("settings").content = [settings]
+    Database.get_database("settings").content = [Item(**to_short_config(vars(settings)))]
     Database.get_database("settings").save()
     return Reply()
 
 #config conversions----
-def to_short_config(config, categories=None):
+def to_short_config(long_config, categories=None):
     values = {}
 
-    for category, items in config.items():
+    for category, items in long_config.items():
         if categories and category not in categories:
             continue
 
@@ -64,3 +64,25 @@ def to_short_config(config, categories=None):
 
                 values[setting["id"]] = setting["value"]
     return values
+
+def to_long_config(short_config, template):
+    long_config = deepcopy(template)
+    for category in long_config:
+        if not isinstance(category, dict):
+            continue
+
+        settings = category.get("settings", [])
+        if not isinstance(settings, list) or not settings:
+            continue
+
+        for setting in settings:
+            if not isinstance(setting, dict):
+                continue
+
+            if setting.get("id") is None:
+                continue
+
+            setting["value"] = short_config.get(setting["id"], setting.get("value"))
+    
+    long_config.pop("DATAFORGE_UUID", None)
+    return long_config

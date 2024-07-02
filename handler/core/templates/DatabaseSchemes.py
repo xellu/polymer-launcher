@@ -2,7 +2,7 @@ from ..services.database.jsondb.engine import item as Item
 
 def SettingsTemplate():
     return [Item(
-        launcher = [
+        application = [
             {
                 "name": "Appearance",
                 "icon": "bi bi-palette",
@@ -12,7 +12,7 @@ def SettingsTemplate():
                         "type": "select",
                         "label": "Theme",
                         "value": "default",
-                        "options": ["default", "catppuccin", "amoled"]
+                        "options": ["default", "amoled", "multimc", "catppuccin-mocha", "catppuccin-macchiato", "catppuccin-frappe", "catppuccin-latte"]
                     },
                     {
                         "id": "darkmode",

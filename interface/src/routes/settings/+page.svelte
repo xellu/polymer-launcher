@@ -6,8 +6,9 @@
     import { apiBaseUrl } from "$lib/config";
     import { settingsManager } from "$lib/scripts/SettingsManager.ts";
 
-    import { getToastStore } from "@skeletonlabs/skeleton";
+    import { getToastStore, getModalStore } from "@skeletonlabs/skeleton";
     const toast = getToastStore();
+    const modal = getModalStore();
 
     let settings: any = {}
 
@@ -74,10 +75,23 @@
         })
     }
 
-    function resetSettings(confirm?: boolean) {
-        if (confirm) {
-            loadSettings()
+    function resetSettings(confirm?: boolean | "open") {
+        if (confirm == true) {
+            return loadSettings()
         }
+
+        if (confirm != "open") {
+            return
+        }
+
+        modal.trigger({
+            type: "confirm",
+            title: "Discard Changes",
+            body: "Are you sure you want to discard all changes?",
+            response: (r) => {
+                resetSettings(r)
+            }
+        })
     }
 
     onMount(() => {
@@ -94,7 +108,7 @@
     {:else}
     <div class="h-full bg-surface-800 p-3 flex flex-col gap-2 pt-0 drop-shadow-md min-w-48">
         {#each Object.keys(settings) as category}
-            <p class="uppercase mt-3 font-bold text-primary-500">{category}</p>
+            <p class="uppercase mt-3 font-bold text-primary-500 text-sm">{category}</p>
             {#each settings[category] as setting}
                 <button
                     class="btn w-full flex gap-1 items-center justify-start {currentPage.name == setting.name ? 'variant-filled-primary' : 'variant-filled-surface'}"
@@ -150,7 +164,7 @@
 
 <div class="fixed bottom-0 right-0 p-3 flex gap-3 items-center">
     <button class="btn variant-outline-error" on:click={() => {
-        resetSettings()
+        resetSettings("open")
     }}>Discard</button>
     <button class="btn variant-filled-primary" on:click={() => {
         pushSettings()
