@@ -82,3 +82,22 @@ def get_instances():
             "latest": LatestRelease
         }
     )
+
+@v1instances.route("/<instance_id>", methods=["GET"])
+def get_instance(instance_id):
+    instance = Database.get_database("instances").find("DATAFORGE_UUID", instance_id)
+    if not instance:
+        return Reply(error="Instance not found"), 404
+    
+    return Reply(**vars(instance))
+
+@v1instances.route("/<instance_id>/openfolder", methods=["POST"])
+def open_folder(instance_id):
+    instance = Database.get_database("instances").find("DATAFORGE_UUID", instance_id)
+    if not instance:
+        return Reply(error="Instance not found"), 404
+    
+    path = instance.path.replace("/", "\\") if os.name == "nt" else f"xdg-open {instance.path}"
+
+    os.system(f"start {path}")
+    return Reply()

@@ -60,7 +60,7 @@
             document.getElementsByTagName("html")[0].className = settings.darkmode ? "dark" : "";
         }
         if (settings.favicon) {
-            favicon.set(settings.favicon + ".png");
+            favicon.set("/" + settings.favicon + ".png");
         }
     }
 </script>

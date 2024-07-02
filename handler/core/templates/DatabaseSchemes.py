@@ -35,7 +35,7 @@ def SettingsTemplate():
                     {
                         "id": "favicon",
                         "type": "select",
-                        "label": "Polymer Icon",
+                        "label": "Launcher Icon",
                         "value": "Polymer",
                         "options": ["Polymer", "PolymerWhite", "PolymerBlack", "PolymerCatppuccin", "PolymerBlackBG", "PolymerWhiteBG", "PolymerMonoBlack", "PolymerMonoWhite"]
                     }
