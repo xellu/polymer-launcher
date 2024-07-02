@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import Loader from "$lib/components/loader.svelte";
 
     import { apiBaseUrl } from "$lib/config";
@@ -57,6 +58,24 @@
         })
     }
 
+    function createInstance() {
+        fetch(`${apiBaseUrl}/instances/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: selection.name || selection.version,
+                version_id: selection.version,
+                icon_path: selection.icon
+            })
+        }).then(res => {
+            if (res.ok) {
+                goto("/")
+            }
+        })
+    }
+
     let selection = {
         name: "",
         version: "",
@@ -111,8 +130,8 @@
             <span>Icon</span>
             <div class="flex gap-1 flex-wrap p-3 bg-primary-500/10 dark:bg-surface-700 rounded-xl select-none">
                 {#each icons as icon}
-                    <button on:click={() => selection.icon = icon} class="border-2 {selection.icon == icon ? 'border-primary-500' : 'border-white/0'} rounded-lg overflow-hidden p-px">
-                        <img src={icon} alt={icon} class="w-8 h-8 rounded-md" draggable="false" />
+                    <button on:click={() => selection.icon = icon} class="border-2 {selection.icon == icon ? 'border-white' : 'border-white/0'} duration-300 rounded-sm overflow-hidden p-[2px]">
+                        <img src={icon} alt={icon} class="w-8 h-8" draggable="false" />
                     </button>
                 {/each}
                 <button class="{iconUpload.open ? 'text-primary-500' : 'hover:text-primary-500'} duration-300" on:click={() => {
@@ -123,7 +142,7 @@
             </div>
 
             {#if iconUpload.open}
-            <div class="flex gap-1 items-center mt-5">
+            <div class="flex gap-1 items-center mt-5" transition:slide={{duration: 250}}>
                 <input type="file" accept="image/*" class="input" bind:files={iconUpload.file} on:change={() => {
                     //upload file
                     let formData = new FormData();
@@ -142,7 +161,7 @@
             {/if}
         </label>
 
-        <button class="btn variant-filled-primary mt-5">Create</button>
+        <button class="btn variant-filled-primary mt-5" on:click={() => createInstance()}> Create </button>
 
     </div>
 

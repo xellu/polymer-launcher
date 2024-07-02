@@ -10,10 +10,12 @@ from .events import (shutdown, errors)
 
 import os
 import time
+import requests
 import threading
 from .shared import CoreStats
 
 Release = "1.0.0~Tritium+Polymer"
+LatestRelease = None
 
 Core = LoggingManager("Core.Main")
 
@@ -40,6 +42,7 @@ Shell = ShellService(ShellSource("Core"))
 Shell.start()
 
 Database = DatabaseService(Config, [
+    "instances",
     "settings"
 ])
 Database.start()

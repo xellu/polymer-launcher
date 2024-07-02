@@ -2,10 +2,10 @@ from ..services.database.jsondb.engine import item as Item
 
 def SettingsTemplate():
     return [Item(
-        application = [
+        launcher = [
             {
-                "name": "General",
-                "icon": "bi bi-gear",
+                "name": "Preferences",
+                "icon": "bi bi-sliders",
                 "settings": [
                     {
                         "id": "showSnapshots",

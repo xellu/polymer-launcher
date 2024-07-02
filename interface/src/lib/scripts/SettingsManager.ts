@@ -1,7 +1,9 @@
 import { apiBaseUrl } from "$lib/config"
 import { writable, type Writable } from "svelte/store"
 
-export let settingsStore: Writable<any> = writable({})
+export let settingsStore: Writable<any> = writable({
+    isNotLoaded: true,
+})
 
 
 let eventLoop: any | null = null

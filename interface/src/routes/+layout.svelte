@@ -2,6 +2,8 @@
     import "../app.pcss";
 
     import Logo from "$lib/components/logo.svelte"
+    import Loader from "$lib/components/loader.svelte";
+
     import { page } from "$app/stores"
     import { initializeStores, Toast, Modal } from '@skeletonlabs/skeleton';
 
@@ -12,6 +14,7 @@
 
     initializeStores();
 
+    let loading: boolean = true;
     let currentRoute: string | any = "" //had to add any because of typescript 😍😍
     page.subscribe((value) => {
         currentRoute = value.route.id;
@@ -29,6 +32,9 @@
             if (e.code == "KeyN" && e.ctrlKey && currentRoute == "/") {
                 window.location.href = "/new-instance";
             }
+            if (e.code == "KeyR" && e.ctrlKey) {
+                window.location.reload();
+            }
         })
     })
 
@@ -43,6 +49,10 @@
     })
 
     function processSettings() {
+        if (settings.isNotLoaded == undefined) {
+            loading = false;
+        }
+
         if (settings.theme) {
             document.getElementsByTagName("body")[0].setAttribute("data-theme", settings.theme);
         }
@@ -57,6 +67,9 @@
 
 <title>Polymer</title>
 
+{#if loading}
+    <Loader center={true} />
+{:else}
 <div class="flex h-screen select-none">
 
     <!-- sidebar -->
@@ -81,6 +94,7 @@
     </div>
 
 </div>
+{/if}
 
 <Toast />
 <Modal />
