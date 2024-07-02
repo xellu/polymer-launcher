@@ -12,7 +12,7 @@ def SettingsTemplate():
                         "type": "select",
                         "label": "Theme",
                         "value": "default",
-                        "options": ["default", "amoled", "multimc", "catppuccin-mocha", "catppuccin-macchiato", "catppuccin-frappe", "catppuccin-latte"]
+                        "options": ["default", "amoled", "multimc", "catppuccin-mocha", "catppuccin-macchiato", "catppuccin-frappe", "catppuccin-latte", "tokyo-night", "tokyo-storm"]
                     },
                     {
                         "id": "darkmode",

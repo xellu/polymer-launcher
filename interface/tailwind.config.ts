@@ -9,6 +9,7 @@ import { themeDefault } from './themes/default';
 import { themeCatppuccinMocha, themeCatppuccinMacchiato, themeCatppuccinFrappe, themeCatppuccinLatte } from './themes/catppuccin';
 import { themeAmoled } from './themes/amoled';
 import { themeMultimc } from './themes/multimc';
+import { themeTokyoNight, themeTokyoStorm } from './themes/tokyo';
 
 const config = {
 	// 2. Opt for dark mode to be handled via the class method
@@ -35,7 +36,9 @@ const config = {
 					themeCatppuccinFrappe,
 					themeCatppuccinLatte,
 					themeAmoled,
-					themeMultimc
+					themeMultimc,
+					themeTokyoNight,
+					themeTokyoStorm
 				]
 			}
 		})
