@@ -6,7 +6,7 @@ import forms from '@tailwindcss/forms';
 import { skeleton } from '@skeletonlabs/tw-plugin';
 
 //theme imports
-import { themeDefault } from './themes/default';
+import { themeDark, themeLight } from './themes/default';
 import { themeCatppuccinMocha, themeCatppuccinMacchiato, themeCatppuccinFrappe, themeCatppuccinLatte } from './themes/catppuccin';
 import { themeAmoled } from './themes/amoled';
 import { themeMultimc } from './themes/multimc';
@@ -31,7 +31,8 @@ const config = {
 		skeleton({
 			themes: {
 				custom: [
-					themeDefault,
+					themeDark,
+					themeLight,
 					themeCatppuccinMocha,
 					themeCatppuccinMacchiato,
 					themeCatppuccinFrappe,

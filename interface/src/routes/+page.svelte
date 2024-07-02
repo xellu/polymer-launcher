@@ -14,7 +14,7 @@
             name: "New Instance",
             icon: "bi bi-plus-square",
             onClick: () => {
-                goto(`/newgame`);	
+                goto(`/newinstance`);	
             }
         },
         {
