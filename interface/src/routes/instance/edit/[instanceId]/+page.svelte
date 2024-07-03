@@ -125,11 +125,11 @@
     <Loader center={true} />
 {:else}
 <div class="flex h-full">
-    <div class="min-w-44 h-full bg-surface-600">
+    <div class="min-w-48 h-full bg-surface-100 dark:bg-surface-800 p-3 flex flex-col drop-shadow-md">
 
     </div>
     <div class="p-5 select-none">
-        <h2 class="h3 font-bold">New Instance</h2>
+        <h2 class="h3 font-bold capitalize">{tab}</h2>
 
         <div class="flex flex-col gap-3 mt-5" transition:slide>
             <!-- name -->
@@ -161,7 +161,7 @@
                 <span>Icon</span>
                 <div class="flex gap-1 flex-wrap p-3 bg-primary-500/10 dark:bg-surface-700 rounded-xl select-none">
                     {#each icons as icon}
-                        <button on:click={() => { instance.icon_path = icon; save() }} class="border-2 {instance.icon_path == icon ? 'border-white' : 'border-white/0'} duration-300 rounded-sm overflow-hidden p-[2px]">
+                        <button on:click={() => { instance.icon_path = icon; save() }} class="border-2 {instance.icon_path == icon ? 'border-surface-900 dark:border-surface-100' : 'border-white/0'} duration-300 rounded-sm overflow-hidden p-[2px]">
                             <img src={icon} alt={icon} class="w-8 h-8" draggable="false" />
                         </button>
                     {/each}

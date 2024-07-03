@@ -32,10 +32,11 @@ def download_game(version, path, external_id) -> str | bool:
     if not version_data:
         return "Unable fetch version data"
     
-    download_file(version_data["downloads"]["client"]["url"], f"{path}/client.jar", external_id, "client")
 
-    for directory in ["resourcepacks", "mods", "saves", "shaderpacks", "libraries", "assets"]:
+    for directory in ["resourcepacks", "mods", "saves", "shaderpacks", "libraries", "assets", "versions", f"versions/{version}"]:
         os.makedirs(f"{path}/{directory}", exist_ok=True)
+
+    download_file(version_data["downloads"]["client"]["url"], f"{path}/versions/{version}/client.jar", external_id, "client")
     
     # Download libraries, natives & create their paths
     libraries = version_data["libraries"]
@@ -70,8 +71,25 @@ def download_game(version, path, external_id) -> str | bool:
     
     assets = r.json()
     
-
+    # run_game(path, version, external_id)
     return True
+
+def run_game(path, version, external_id) -> str | bool:
+    """
+        Runs the game with the specified version
+
+        :path: str: path .minecraft folder
+        :version: str: The version of the game to run
+        :external_id: str: The external id of the game
+    """
+
+    if not os.path.exists(f"{path}/versions/{version}/client.jar"):
+        return "Game files not found"
+    
+    # Run the game
+    os.system(f"java -jar {path}/versions/{version}/client.jar") #does not work for shit
+
+
 
 def download_file(url, path, external_id, file_display_overwrite: None|str = None):
     r = requests.get(url, stream=True)

@@ -95,12 +95,18 @@
             <h3 class="text-center text-lg max-w-32 whitespace-nowrap text-ellipsis overflow-hidden self-center">{selectedInstance.name}</h3>
 
             <div class="flex flex-col gap-1 w-full">
-                
+            {#if selectedInstance.meta.is_downloading != undefined}
+                <div class="text-sm flex items-center gap-1 justify-center btn btn-sm">
+                    <i class="bi bi-arrow-repeat animate-spin"></i>
+                    <p>Downloading</p>
+                </div>
+            {:else}
                 <button class="btn btn-sm variant-soft-primary flex items-center justify-start px-3 gap-1">
                     <i class="bi bi-play-circle"></i>
                     <p>Play</p>
                 </button>
-                
+            {/if}
+
                 <button class="btn btn-sm variant-soft-primary flex items-center justify-start px-3 gap-1"
                     on:click={() => { goto(`/instance/edit/${selectedInstance.DATAFORGE_UUID}`) }}>
                     
@@ -113,9 +119,7 @@
 
                     <i class="bi bi-folder"></i>
                     <p>Open Folder</p>
-                </button>
-                
-                
+                </button>                
             </div>
         </div>
     {/if}

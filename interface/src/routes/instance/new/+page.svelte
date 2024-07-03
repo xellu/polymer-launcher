@@ -104,16 +104,17 @@
 
                 clearInterval(interval)
 
-                if (res.ok) {
-                    goto(`/`)
-                } else {
-                    res.text().then(text => {
+                res.text().then(text => {
+                    let data = JSON.parse(text)
+                    if (res.ok) {
+                        goto(`/instance/edit/${data.instance}`)
+                    } else {
                         toast.trigger({
-                            message: JSON.parse(text).error,
+                            message: data.error,
                             background: "variant-filled-error"
                         })
-                    })
-                }
+                    }
+                })
             }, 500)
         })
     }
@@ -185,7 +186,7 @@
             <span>Icon</span>
             <div class="flex gap-1 flex-wrap p-3 bg-primary-500/10 dark:bg-surface-700 rounded-xl select-none">
                 {#each icons as icon}
-                    <button on:click={() => selection.icon = icon} class="border-2 {selection.icon == icon ? 'border-white' : 'border-white/0'} duration-300 rounded-sm overflow-hidden p-[2px]">
+                    <button on:click={() => selection.icon = icon} class="border-2 {selection.icon == icon ? 'border-surface-900 dark:border-surface-100' : 'border-white/0'} duration-300 rounded-sm overflow-hidden p-[2px]">
                         <img src={icon} alt={icon} class="w-8 h-8" draggable="false" />
                     </button>
                 {/each}

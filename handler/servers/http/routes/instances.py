@@ -75,7 +75,7 @@ def create_instance():
 
     del instance.meta["is_downloading"]
 
-    return Reply()
+    return Reply(instance = instance.DATAFORGE_UUID)
 
 @v1instances.route("/create/<identifier>/status", methods=["GET"])
 def get_download_status(identifier):
