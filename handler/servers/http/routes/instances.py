@@ -87,6 +87,22 @@ def get_instance(instance_id):
     
     return Reply(**vars(instance))
 
+@v1instances.route("/<instance_id>/edit", methods=["POST"])
+def edit_instance(instance_id):
+    instance = Database.get_database("instances").find("DATAFORGE_UUID", instance_id)
+    if not instance:
+        return Reply(error="Instance not found"), 404
+    
+    data = Require(request, instance=dict).body()
+    if not data.ok:
+        return Reply(**data.content), 400
+    
+    for k, v in data.content.get("instance").items():
+        setattr(instance, k, v)
+        
+    Database.get_database("instances").save()
+    return Reply()
+
 @v1instances.route("/<instance_id>/openfolder", methods=["POST"])
 def open_folder(instance_id):
     instance = Database.get_database("instances").find("DATAFORGE_UUID", instance_id)
