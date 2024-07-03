@@ -107,7 +107,10 @@
                 res.text().then(text => {
                     let data = JSON.parse(text)
                     if (res.ok) {
-                        goto(`/instance/edit/${data.instance}`)
+                        if (window.location.pathname == "/instance/new")
+                            goto(`/instance/edit/${data.uuid}`)
+                        else if (window.location.pathname == "/")
+                            window.location.reload()
                     } else {
                         toast.trigger({
                             message: data.error,
@@ -184,7 +187,7 @@
         <!-- icon -->
         <label class="label">
             <span>Icon</span>
-            <div class="flex gap-1 flex-wrap p-3 bg-primary-500/10 dark:bg-surface-700 rounded-xl select-none">
+            <div class="flex gap-1 flex-wrap p-3 card select-none">
                 {#each icons as icon}
                     <button on:click={() => selection.icon = icon} class="border-2 {selection.icon == icon ? 'border-surface-900 dark:border-surface-100' : 'border-white/0'} duration-300 rounded-sm overflow-hidden p-[2px]">
                         <img src={icon} alt={icon} class="w-8 h-8" draggable="false" />
