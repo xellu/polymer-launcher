@@ -4,9 +4,12 @@
 
     import { apiBaseUrl } from "$lib/config";
     import { settingsStore } from "$lib/scripts/SettingsManager";
+    import { getToastStore } from "@skeletonlabs/skeleton";
 
     import { onMount } from "svelte";
     import { slide } from "svelte/transition";
+
+    const toast = getToastStore();
 
     let loading: boolean = true;
     let versions: {latest: string, versions: {id: string, type: string}[]} = {
@@ -23,9 +26,12 @@
 
     let settings: any = {}
     let showSnapshots = false
-    let download = {
+    let download: {open: boolean, status: {file: string | null, progress: number}} = {
         open: false,
-        progress: 0
+        status: {
+            file: null,
+            progress: 0
+        }
     }
 
     settingsStore.subscribe((value) => {
@@ -69,10 +75,13 @@
         let interval = setInterval(() => {
             fetch(`${apiBaseUrl}/instances/create/${id}/status`).then(res => {
                 res.text().then(text => {
-                    download.progress = JSON.parse(text).status;
+                    let data = JSON.parse(text).status;
+                    download.status.progress = data.progress;
+                    
+                    if (data.file) { download.status.file = data.file }
                 })
             })
-        }, 1000)
+        }, 300)
 
         fetch(`${apiBaseUrl}/instances/create`, {
             method: "POST",
@@ -86,16 +95,24 @@
                 identifier: id
             })
         }).then(res => {
-            download.progress = 100
-
             setTimeout(() => {
                 download.open = false
-                download.progress = 0
+                download.status = {
+                    progress: 0,
+                    file: null
+                }
 
                 clearInterval(interval)
 
                 if (res.ok) {
                     goto(`/`)
+                } else {
+                    res.text().then(text => {
+                        toast.trigger({
+                            message: JSON.parse(text).error,
+                            background: "variant-filled-error"
+                        })
+                    })
                 }
             }, 500)
         })
@@ -126,11 +143,11 @@
         <Loader center={false} />
         <div class="flex flex-col gap-1">
             <div class="flex items-center justify-between">  
-                <p class="text-xs text-primary-400">Downloading Files</p>
-                <p class="text-xs text-primary-400">{Math.floor(download.progress)}%</p>
+                <p class="text-xs text-primary-400">{download.status.file == null ? "Waiting" : `Downloading ${download.status.file}`}</p>
+                <p class="text-xs text-primary-400">{Math.floor(download.status.progress).toString() == "NaN" ? 0 : Math.floor(download.status.progress)}%</p>
             </div>
             <div class="w-64 h-2 rounded-md overflow-hidden bg-surface-500">
-                <div class="h-full bg-primary-500 duration-300 rounded-md" style="width: {Math.floor(download.progress)}%"></div>
+                <div class="h-full bg-primary-500 duration-300 rounded-md" style="width: {Math.floor(download.status.progress)}%"></div>
             </div>
         </div>
     </div>

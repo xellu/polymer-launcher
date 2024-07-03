@@ -9,6 +9,7 @@ def InstanceTemplate():
         path = "data/instances", #path to the instance
         game_executable = "minecraft.jar", #name of the game executable
 
+        meta = {}, #meta data (ex. is_downloading, is_running, etc.)
         settings = {
             "jvm_arguments": {
                 "ram": "-Xmx2G -Xms1G", #ram allocation

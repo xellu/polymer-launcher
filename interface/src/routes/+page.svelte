@@ -19,13 +19,13 @@
                 goto(`/instance/new`);	
             }
         },
-        {
-            name: "New Folder",
-            icon: "bi bi-folder-plus",
-            onClick: () => {
-                alert("new folder")
-            }
-        }
+        // {
+        //     name: "New Folder",
+        //     icon: "bi bi-folder-plus",
+        //     onClick: () => {
+        //         alert("new folder")
+        //     }
+        // }
     ]
 
     let selectedInstance: any = null;

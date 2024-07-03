@@ -36,9 +36,8 @@ class DatabaseService:
 
     def stop(self):
         self.running = False
-        for db in self.dbs:
-            if isinstance(db, jsondb.RuntimeDB):
-                db.save(indent=True)
+        for _, db in self.dbs.items():
+            db.save(indent=True)
         logger.ok("Database service stopped")
 
     def connect(self) -> None:
@@ -48,11 +47,11 @@ class DatabaseService:
         self.load_databases()
 
         while self.running:
-            for db in self.dbs:
-                if isinstance(db, jsondb.RuntimeDB):
-                    db.save(indent=True)
-            time.sleep(60)
+            for _, db in self.dbs.items():
+                db.save(indent=True)
             
+            for i in range(60): #stops faster
+                time.sleep(1) #save every minute
 
     def load_databases(self) -> None:
         """

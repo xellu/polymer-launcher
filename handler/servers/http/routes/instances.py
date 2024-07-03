@@ -57,26 +57,29 @@ def create_instance():
     
     instance = InstanceTemplate()
     instance.name = data.content.get("name")
-    instance.path = f"data/instances/{ReplaceUnicode(instance.name)}_{RandomStr(8)}"
+    instance.path = f"../instances/{ReplaceUnicode(instance.name)}_{RandomStr(8)}/.minecraft"
 
     instance.version_id = data.content.get("version_id")
     instance.icon_path = data.content.get("icon_path")
+    instance.meta["is_downloading"] = True
 
     Database.get_database("instances").create(instance)
-    Database.get_database("instances").save()
 
     if not os.path.exists(instance.path):
         os.makedirs(instance.path)
     
     res = download_game(instance.version_id, instance.path, data.content.get("identifier"))
     if res != True:
+        Database.get_database("instances").delete(instance)
         return Reply(error=res), 400
+
+    del instance.meta["is_downloading"]
 
     return Reply()
 
 @v1instances.route("/create/<identifier>/status", methods=["GET"])
 def get_download_status(identifier):
-    return Reply(status=download_status.get(identifier, 0))
+    return Reply(status=download_status.get(identifier, {"file": None, "progress": 100}))
 
 #instances page---------------------
 
@@ -108,7 +111,6 @@ def edit_instance(instance_id):
     for k, v in data.content.get("instance").items():
         setattr(instance, k, v)
 
-    Database.get_database("instances").save()
     return Reply()
 
 @v1instances.route("/<instance_id>/openfolder", methods=["POST"])
