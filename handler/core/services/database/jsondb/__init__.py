@@ -7,9 +7,6 @@ from ....templates import DatabaseSchemes
 Item = engine.item
 instances = []
 
-def convert_to_dict(obj):
-    return vars(obj)
-
 #DB
 class RuntimeDB:
     def __init__(self, name, folder="data",  logging = True, debug = False, runtime=False):

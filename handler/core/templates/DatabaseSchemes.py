@@ -1,4 +1,5 @@
 from ..services.database.jsondb.engine import item as Item
+from core.tools import to_short_config, convert_to_dict
 
 def SettingsTemplate():
     return [Item(
@@ -57,5 +58,5 @@ def SettingsTemplate():
     )]
 
 Schemes = {
-    "settings": SettingsTemplate(),
+    "settings": [Item(**to_short_config(convert_to_dict(SettingsTemplate()[0])))],
 }

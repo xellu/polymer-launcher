@@ -1,6 +1,8 @@
 from ..router import v1instances
 from ..services.adapter import Reply, Require
 
+from .installer import VERSIONS, download_game, download_status
+
 from core.tools import RandomStr, ReplaceUnicode
 from core.services.database.jsondb import Item
 from core import Database, Release, LatestRelease
@@ -9,8 +11,6 @@ from core.templates.InstanceTemplate import InstanceTemplate
 from flask import request, send_file
 import os
 import requests
-
-VERSIONS = requests.get("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json").json()
 
 #create instance page-----------------
 @v1instances.route("/versions", methods=["GET"])
@@ -51,7 +51,7 @@ def get_icon(icon_name):
 
 @v1instances.route("/create", methods=["POST"])
 def create_instance():
-    data = Require(request, name=str, version_id=str, icon_path=str).body()
+    data = Require(request, name=str, version_id=str, icon_path=str, identifier=str).body()
     if not data.ok:
         return Reply(**data.content), 400
     
@@ -68,7 +68,15 @@ def create_instance():
     if not os.path.exists(instance.path):
         os.makedirs(instance.path)
     
+    res = download_game(instance.version_id, instance.path, data.content.get("identifier"))
+    if res != True:
+        return Reply(error=res), 400
+
     return Reply()
+
+@v1instances.route("/create/<identifier>/status", methods=["GET"])
+def get_download_status(identifier):
+    return Reply(status=download_status.get(identifier, 0))
 
 #instances page---------------------
 
@@ -99,7 +107,7 @@ def edit_instance(instance_id):
     
     for k, v in data.content.get("instance").items():
         setattr(instance, k, v)
-        
+
     Database.get_database("instances").save()
     return Reply()
 

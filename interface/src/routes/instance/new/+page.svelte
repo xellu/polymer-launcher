@@ -23,6 +23,10 @@
 
     let settings: any = {}
     let showSnapshots = false
+    let download = {
+        open: false,
+        progress: 0
+    }
 
     settingsStore.subscribe((value) => {
         settings = value;
@@ -59,6 +63,17 @@
     }
 
     function createInstance() {
+        const id = Math.random().toString(36).substring(7);
+
+        download.open = true;
+        let interval = setInterval(() => {
+            fetch(`${apiBaseUrl}/instances/create/${id}/status`).then(res => {
+                res.text().then(text => {
+                    download.progress = JSON.parse(text).status;
+                })
+            })
+        }, 1000)
+
         fetch(`${apiBaseUrl}/instances/create`, {
             method: "POST",
             headers: {
@@ -67,12 +82,22 @@
             body: JSON.stringify({
                 name: selection.name || selection.version,
                 version_id: selection.version,
-                icon_path: selection.icon
+                icon_path: selection.icon,
+                identifier: id
             })
         }).then(res => {
-            if (res.ok) {
-                goto("/")
-            }
+            download.progress = 100
+
+            setTimeout(() => {
+                download.open = false
+                download.progress = 0
+
+                clearInterval(interval)
+
+                if (res.ok) {
+                    goto(`/`)
+                }
+            }, 500)
         })
     }
 
@@ -96,11 +121,24 @@
 
 {#if loading}
     <Loader center={true} />
+{:else if download.open}
+    <div class="w-full h-full flex flex-col gap-10 items-center justify-center">
+        <Loader center={false} />
+        <div class="flex flex-col gap-1">
+            <div class="flex items-center justify-between">  
+                <p class="text-xs text-primary-400">Downloading Files</p>
+                <p class="text-xs text-primary-400">{Math.floor(download.progress)}%</p>
+            </div>
+            <div class="w-64 h-2 rounded-md overflow-hidden bg-surface-500">
+                <div class="h-full bg-primary-500 duration-300 rounded-md" style="width: {Math.floor(download.progress)}%"></div>
+            </div>
+        </div>
+    </div>
 {:else}
 <div class="p-5 select-none">
     <h2 class="h3 font-bold">New Instance</h2>
 
-    <div class="flex flex-col gap-3 w-3/5 mt-5" transition:slide>
+    <div class="flex flex-col gap-3 w-3/5 mt-5" in:slide>
         <!-- name -->
         <label class="label">
             <span>Instance Name</span>
