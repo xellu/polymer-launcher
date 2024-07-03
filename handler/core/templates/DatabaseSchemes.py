@@ -12,7 +12,19 @@ def SettingsTemplate():
                         "type": "switch",
                         "label": "Show Snapshots",
                         "value": False
-                    }
+                    },
+                    {
+                        "id": "showUpdateNotifications",
+                        "type": "switch",
+                        "label": "Show Update Notifications",
+                        "value": True
+                    },
+                    # { #not implemented yet
+                    #     "id": "autoUpdate",
+                    #     "type": "switch",
+                    #     "label": "Auto Update",
+                    #     "value": True
+                    # }
                 ]
             },
             {

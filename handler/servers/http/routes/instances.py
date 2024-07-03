@@ -76,11 +76,7 @@ def create_instance():
 def get_instances():
     instances = Database.get_database("instances").content
     return Reply(
-        instances = [vars(instance) for instance in instances],
-        release = {
-            "current": Release,
-            "latest": LatestRelease
-        }
+        instances = [vars(instance) for instance in instances]
     )
 
 @v1instances.route("/<instance_id>", methods=["GET"])

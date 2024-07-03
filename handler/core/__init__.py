@@ -14,13 +14,13 @@ import requests
 import threading
 from .shared import CoreStats
 
-Release = "1.0.0~Tritium+Polymer"
-LatestRelease = None
-
 Core = LoggingManager("Core.Main")
 
 # load config
 Config = ConfigManager("config.json", template=ConfigTemplate)
+
+Release = "1.0.0~Tritium+Polymer"
+LatestRelease = requests.get("https://raw.githubusercontent.com/xellu/polymer-launcher/main/release.json").json().get("devbuild" if Config.get("DEVMODE") else "latest")
 
 Core.info(f"Running {Config.get('SERVER.NAME')}, release {Release}")
 

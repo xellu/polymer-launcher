@@ -28,7 +28,6 @@
         }
     ]
 
-    let newUpdateAvailable: boolean = false;
     let selectedInstance: any = null;
 
     onMount(() => {
@@ -48,12 +47,8 @@
                 instances = data.instances;
                 
                 selectedInstance = instances[0];
-                if (data.release.current != data.release.latest) {
-                    newUpdateAvailable = true;
-                }
             })
         })
-    
     })
 
     function openFolder() {

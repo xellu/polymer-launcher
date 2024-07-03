@@ -10,12 +10,14 @@
     import { settingsManager, settingsStore } from "$lib/scripts/SettingsManager.ts";
     import { onMount, onDestroy } from "svelte";
 
-    import { favicon } from "$lib/config";
+    import { apiBaseUrl, favicon } from "$lib/config";
 
     initializeStores();
 
     let loading: boolean = true;
     let currentRoute: string | any = "" //had to add any because of typescript 😍😍
+    let isOutdated: boolean = false;
+
     page.subscribe((value) => {
         currentRoute = value.route.id;
     })
@@ -35,6 +37,13 @@
             if (e.code == "KeyR" && e.ctrlKey) {
                 window.location.reload();
             }
+        })
+
+        fetch(`${apiBaseUrl}/system`).then(res => {
+            res.text().then(text => {
+                let data = JSON.parse(text);
+                isOutdated = data.release.is_outdated;
+            })
         })
     })
 
@@ -73,7 +82,7 @@
 <div class="flex h-screen select-none">
 
     <!-- sidebar -->
-    <div class="bg-surface-50 dark:bg-surface-700 flex flex-col gap-2 p-3 h-full select-none drop-shadow-md z-20 min-w-64">
+    <div class="bg-surface-50 dark:bg-surface-700 flex flex-col gap-2 p-3 h-full select-none drop-shadow-md z-20 min-w-64 max-w-64">
         <Logo />
 
         <!-- padding -->
@@ -98,3 +107,12 @@
 
 <Toast />
 <Modal />
+
+{#if isOutdated && settings.showUpdateNotifications} 
+<div class="fixed w-64 left-0 bottom-0 p-3 z-50">
+    <button class="btn variant-filled-success flex items-center gap-2 w-full">
+        <i class="bi bi-download"></i>
+        <p>Update Available</p>
+    </button>
+</div>
+{/if}

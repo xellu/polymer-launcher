@@ -7,7 +7,7 @@ logger.info("Initializing HTTP server")
 
 from events import EventBus
 
-from .routes import (settings, instances)
+from .routes import (settings, instances, system)
 from .router import App
 
 from .services.adapter import Reply
